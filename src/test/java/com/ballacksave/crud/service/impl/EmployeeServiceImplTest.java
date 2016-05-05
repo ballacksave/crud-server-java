@@ -1,9 +1,9 @@
 package com.ballacksave.crud.service.impl;
 
 import com.ballacksave.crud.config.AppConfig;
-import com.ballacksave.crud.repository.EmployeeRepository;
 import com.ballacksave.crud.entity.Employee;
 import com.ballacksave.crud.model.AjaxEmployee;
+import com.ballacksave.crud.repository.EmployeeRepository;
 import com.ballacksave.crud.service.EmployeeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-//@WebAppConfiguration
+@WebAppConfiguration
 @ContextConfiguration(classes = AppConfig.class)
 public class EmployeeServiceImplTest {
 
