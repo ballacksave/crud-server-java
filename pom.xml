@@ -12,7 +12,12 @@
         <spring.version>4.2.5.RELEASE</spring.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
         <jackson-core.version>2.7.3</jackson-core.version>
-        
+        <hibernate-entitymanager.version>5.1.0.Final</hibernate-entitymanager.version>
+        <spring-data-jpa.version>1.9.4.RELEASE</spring-data-jpa.version>
+        <commons-dbcp.version>1.4</commons-dbcp.version>
+        <mysql-connector-java.version>5.1.38</mysql-connector-java.version>
+
+        <!-- TEST DEPENDENCY-->
         <junit.version>4.12</junit.version>
         <mockito-all.version>1.10.19</mockito-all.version>
         <json-path.version>0.9.1</json-path.version>
@@ -46,6 +51,31 @@
             <version>${jackson-core.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate-entitymanager.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>${spring-data-jpa.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>${commons-dbcp.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
+        </dependency>
+
+        <!-- TEST DEPENDENCY-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
