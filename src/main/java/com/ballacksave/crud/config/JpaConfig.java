@@ -11,7 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = {"com.ballacksave.crud.dao"})
+@EnableJpaRepositories(basePackages = {"com.ballacksave.crud.repository"})
 public class JpaConfig {
 
     @Bean
@@ -31,7 +31,7 @@ public class JpaConfig {
 
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setJpaVendorAdapter(vendorAdapter);
-        emf.setPackagesToScan("com.ballacksave.crud.domain");
+        emf.setPackagesToScan("com.ballacksave.crud.entity");
         emf.setDataSource(dataSource());
         emf.afterPropertiesSet();
 

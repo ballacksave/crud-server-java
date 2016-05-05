@@ -1,8 +1,8 @@
 package com.ballacksave.crud.service.impl;
 
 import com.ballacksave.crud.config.AppConfig;
-import com.ballacksave.crud.dao.EmployeeDao;
-import com.ballacksave.crud.domain.Employee;
+import com.ballacksave.crud.repository.EmployeeRepository;
+import com.ballacksave.crud.entity.Employee;
 import com.ballacksave.crud.model.AjaxEmployee;
 import com.ballacksave.crud.service.EmployeeService;
 import org.junit.Before;
@@ -14,7 +14,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class EmployeeServiceImplTest {
     private EmployeeService employeeService;
 
     @Mock
-    private EmployeeDao employeeDao;
+    private EmployeeRepository employeeRepository;
 
 
     @Before
@@ -53,7 +52,7 @@ public class EmployeeServiceImplTest {
         employee.setId("456");
         employee.setName("employee two");
         employees.add(employee);
-        given(employeeDao.findAll()).willReturn(employees);
+        given(employeeRepository.findAll()).willReturn(employees);
 
         //when
         List<AjaxEmployee> ajaxEmployees = employeeService.findAll();
