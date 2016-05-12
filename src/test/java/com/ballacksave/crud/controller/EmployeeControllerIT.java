@@ -1,12 +1,14 @@
 package com.ballacksave.crud.controller;
 
 import com.ballacksave.crud.config.AppConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,6 +24,8 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,10 +45,13 @@ public class EmployeeControllerIT {
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
+    private ObjectMapper mapper;
 
     @Before
+
     public void before() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        mapper = new ObjectMapper();
     }
 
     @Test
@@ -59,4 +66,23 @@ public class EmployeeControllerIT {
                 .andExpect(jsonPath("$[1].name", is("ballack")))
         ;
     }
+
+    @Test
+    @Transactional
+    public void should_returnStatusCreated_when_createNewEmployee() throws Exception {
+        //given
+        String employee = "{\"name\":\"ballacksave\"}";
+
+        //when
+        mockMvc.perform(post("/employee")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(employee)
+        )
+                //then
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", is("ballacksave")))
+        ;
+    }
+
 }

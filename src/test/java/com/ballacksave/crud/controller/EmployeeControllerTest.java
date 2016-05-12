@@ -3,12 +3,16 @@ package com.ballacksave.crud.controller;
 import com.ballacksave.crud.config.AppConfig;
 import com.ballacksave.crud.model.AjaxEmployee;
 import com.ballacksave.crud.service.EmployeeService;
+import com.ballacksave.utils.UUIDGen;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -17,10 +21,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 
+import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,6 +40,7 @@ public class EmployeeControllerTest {
     private EmployeeController employeeController;
 
     private MockMvc mockMvc;
+    private ObjectMapper mapper;
 
     @Mock
     private EmployeeService employeeService;
@@ -41,6 +49,7 @@ public class EmployeeControllerTest {
     public void before() {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(employeeController).build();
+        mapper = new ObjectMapper();
     }
 
     @Test
@@ -69,7 +78,29 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$[1].id", is("234")))
                 .andExpect(jsonPath("$[1].name", is("ballacksave")))
         ;
-
     }
 
+    @Test
+    public void should_returnEmployee_when_create() throws Exception {
+        //given
+        String id = "123-346";
+        String name = "ronny";
+        AjaxEmployee ajaxEmployee = new AjaxEmployee();
+        ajaxEmployee.setId(id);
+        ajaxEmployee.setName(name);
+        given(employeeService.save(Mockito.any(AjaxEmployee.class))).willReturn(ajaxEmployee);
+
+
+        //when
+        mockMvc.perform(post("/employee")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(ajaxEmployee)))
+
+                //then
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(id)))
+                .andExpect(jsonPath("$.name", is(name)))
+        ;
+    }
 }

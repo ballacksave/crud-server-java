@@ -5,6 +5,7 @@ import com.ballacksave.crud.entity.Employee;
 import com.ballacksave.crud.model.AjaxEmployee;
 import com.ballacksave.crud.repository.EmployeeRepository;
 import com.ballacksave.crud.service.EmployeeService;
+import com.ballacksave.utils.UUIDGen;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -34,6 +36,8 @@ public class EmployeeServiceImplTest {
     @Mock
     private EmployeeRepository employeeRepository;
 
+    @Mock
+    private UUIDGen uuidGen;
 
     @Before
     public void before() {
@@ -64,7 +68,28 @@ public class EmployeeServiceImplTest {
         assertEquals("employee one", ajaxEmployees.get(0).getName());
         assertEquals("456", ajaxEmployees.get(1).getId());
         assertEquals("employee two", ajaxEmployees.get(1).getName());
+    }
 
+    @Test
+    public void should_returnEmployee_when_create() {
+        //given
+        String id = "123-456";
+        String name = "ballack";
+        Employee employee = new Employee();
+        employee.setId(id);
+        employee.setName(name);
+        given(employeeRepository.save(any(Employee.class))).willReturn(employee);
+        given(uuidGen.generate()).willReturn(id);
+
+        AjaxEmployee ajaxEmployeeInput = new AjaxEmployee();
+        ajaxEmployeeInput.setName(name);
+
+        //when
+        AjaxEmployee ajaxEmployeeOutput = employeeService.save(ajaxEmployeeInput);
+
+        //then
+        assertEquals(id, ajaxEmployeeOutput.getId());
+        assertEquals(name, ajaxEmployeeOutput.getName());
     }
 
 }
