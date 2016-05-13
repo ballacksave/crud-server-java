@@ -3,7 +3,6 @@ package com.ballacksave.crud.controller;
 import com.ballacksave.crud.config.AppConfig;
 import com.ballacksave.crud.model.AjaxEmployee;
 import com.ballacksave.crud.service.EmployeeService;
-import com.ballacksave.utils.UUIDGen;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,13 +20,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 
-import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -101,6 +100,27 @@ public class EmployeeControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(id)))
                 .andExpect(jsonPath("$.name", is(name)))
+        ;
+    }
+
+    @Test
+    public void should_success_when_update() throws Exception {
+        //given
+        String id = "123-346";
+        String name = "ronny";
+        AjaxEmployee ajaxEmployee = new AjaxEmployee();
+        ajaxEmployee.setId(id);
+        ajaxEmployee.setName(name);
+        doNothing().when(employeeService).update(eq(id), Mockito.any(AjaxEmployee.class));
+
+        //when
+        mockMvc.perform(put("/employee/" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(ajaxEmployee)))
+
+                //then
+                .andExpect(status().isOk())
         ;
     }
 }

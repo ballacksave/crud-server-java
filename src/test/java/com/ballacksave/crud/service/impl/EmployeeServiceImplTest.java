@@ -23,6 +23,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -92,4 +93,20 @@ public class EmployeeServiceImplTest {
         assertEquals(name, ajaxEmployeeOutput.getName());
     }
 
+    @Test
+    public void should_success_when_update() {
+        //given
+        String id = "123-456";
+        String name = "ballack";
+        given(employeeRepository.save(any(Employee.class))).willReturn(new Employee());
+
+        AjaxEmployee ajaxEmployeeInput = new AjaxEmployee();
+        ajaxEmployeeInput.setId(id);
+        ajaxEmployeeInput.setName(name);
+
+        //when
+        employeeService.update(id,ajaxEmployeeInput);
+
+        //then
+    }
 }

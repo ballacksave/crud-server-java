@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -23,9 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,7 +54,6 @@ public class EmployeeControllerIT {
     }
 
     @Test
-    @Transactional
     public void should_returnAllEmployee_when_findAll() throws Exception {
         mockMvc.perform(get("/employee"))
                 .andExpect(status().isOk())
@@ -69,6 +67,7 @@ public class EmployeeControllerIT {
 
     @Test
     @Transactional
+    @Rollback
     public void should_returnStatusCreated_when_createNewEmployee() throws Exception {
         //given
         String employee = "{\"name\":\"ballacksave\"}";
@@ -82,6 +81,24 @@ public class EmployeeControllerIT {
                 //then
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is("ballacksave")))
+        ;
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void should_returnStatusOk_when_updateEmployee() throws Exception {
+        //given
+        String employee = "{\"id\":\"234\",\"name\":\"ballacksave\"}";
+
+        //when
+        mockMvc.perform(put("/employee/234")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(employee)
+        )
+                //then
+                .andExpect(status().isOk())
         ;
     }
 

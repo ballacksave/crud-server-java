@@ -8,4 +8,6 @@ public interface EmployeeService {
     List<AjaxEmployee> findAll();
 
     AjaxEmployee save(AjaxEmployee ajaxEmployee);
+
+    void update(String id, AjaxEmployee ajaxEmployee);
 }

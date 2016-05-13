@@ -49,4 +49,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         ajaxEmployeeSaved.setName(employeeSaved.getName());
         return ajaxEmployeeSaved;
     }
+
+    @Override
+    public void update(String id, AjaxEmployee ajaxEmployee) {
+        Employee employee = new Employee();
+        employee.setId(ajaxEmployee.getId());
+        employee.setName(ajaxEmployee.getName());
+
+        employeeRepository.save(employee);
+    }
 }
