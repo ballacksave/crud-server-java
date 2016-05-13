@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,6 +34,19 @@ class EmployeeController {
     ResponseEntity<AjaxEmployee> create(@RequestBody AjaxEmployee requestBody) {
         AjaxEmployee save = employeeService.save(requestBody);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "{id}",
+            method = RequestMethod.PUT,
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    ResponseEntity update(
+            @PathVariable("id") String id,
+            @RequestBody AjaxEmployee requestBody
+    ) {
+        employeeService.update(id, requestBody);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }
