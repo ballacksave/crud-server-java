@@ -70,7 +70,8 @@ public class EmployeeControllerIT {
     @Rollback
     public void should_returnStatusCreated_when_createNewEmployee() throws Exception {
         //given
-        String employee = "{\"name\":\"ballacksave\"}";
+        String name = "ballacksave";
+        String employee = String.format("{\"name\":\"%s\"}", name);
 
         //when
         mockMvc.perform(post("/employee")
@@ -89,13 +90,32 @@ public class EmployeeControllerIT {
     @Rollback
     public void should_returnStatusOk_when_updateEmployee() throws Exception {
         //given
-        String employee = "{\"id\":\"234\",\"name\":\"ballacksave\"}";
+        int id = 234;
+        String name = "ballacksave";
+        String employee = String.format("{\"id\":\"%s\",\"name\":\"%s\"}", id, name);
 
         //when
-        mockMvc.perform(put("/employee/234")
+        mockMvc.perform(put("/employee/" + id)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(employee)
+        )
+                //then
+                .andExpect(status().isOk())
+        ;
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void should_returnStatusOk_when_deleteEmployee() throws Exception {
+        //given
+        int id = 234;
+
+        //when
+        mockMvc.perform(delete("/employee/" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
         )
                 //then
                 .andExpect(status().isOk())

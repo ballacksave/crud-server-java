@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -117,8 +116,24 @@ public class EmployeeControllerTest {
         mockMvc.perform(put("/employee/" + id)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(ajaxEmployee)))
+                .content(mapper.writeValueAsString(ajaxEmployee))
+        )
+                //then
+                .andExpect(status().isOk())
+        ;
+    }
 
+    @Test
+    public void should_success_when_delete() throws Exception {
+        //given
+        String id = "123-346";
+        doNothing().when(employeeService).delete(eq(id));
+
+        //when
+        mockMvc.perform(delete("/employee/" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
                 //then
                 .andExpect(status().isOk())
         ;

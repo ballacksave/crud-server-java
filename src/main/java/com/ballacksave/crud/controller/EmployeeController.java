@@ -49,4 +49,16 @@ class EmployeeController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "{id}",
+            method = RequestMethod.DELETE,
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    ResponseEntity delete(
+            @PathVariable("id") String id
+    ) {
+        employeeService.delete(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
 }

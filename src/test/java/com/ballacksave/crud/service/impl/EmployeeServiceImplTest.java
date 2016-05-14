@@ -24,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doNothing;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -106,6 +107,18 @@ public class EmployeeServiceImplTest {
 
         //when
         employeeService.update(id,ajaxEmployeeInput);
+
+        //then
+    }
+
+    @Test
+    public void should_success_when_delete() {
+        //given
+        String id = "123-456";
+        doNothing().when(employeeRepository).delete(eq(id));
+
+        //when
+        employeeService.delete(id);
 
         //then
     }

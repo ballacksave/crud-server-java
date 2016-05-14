@@ -10,4 +10,6 @@ public interface EmployeeService {
     AjaxEmployee save(AjaxEmployee ajaxEmployee);
 
     void update(String id, AjaxEmployee ajaxEmployee);
+
+    void delete(String id);
 }
